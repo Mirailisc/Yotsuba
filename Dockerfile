@@ -6,12 +6,16 @@ COPY ./pnpm-lock.yaml ./
 
 FROM setup as build
 RUN pnpm i --frozen-lockfile
+
 ARG DOCKER_TOKEN
 ENV DISCORD_TOKEN=${DOCKER_TOKEN}
+
 ARG CLIENT_ID
 ENV CLIENT_ID=${CLIENT_ID}
+
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
+
 COPY . ./
 RUN pnpm run prisma:generate
 
