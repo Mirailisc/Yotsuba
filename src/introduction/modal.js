@@ -2,8 +2,8 @@ import { ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder } from
 import { prisma } from '../index.js'
 import { successIntroduced, failIntroduced } from './embed.js'
 
-const introduction = async (interaction) => {
-  if (interaction.member.roles.cache.some((role) => role.name === 'Novice')) {
+const introduction = async (interaction, context) => {
+  if (interaction.member.roles.cache.some((role) => role.id === context.memberRole)) {
     await interaction
       .reply({ content: `${interaction.user} Role are already assigned to you` })
       .then(() => setTimeout(() => interaction.deleteReply(), 5000))

@@ -64,7 +64,7 @@ client.on('interactionCreate', async (interaction) => {
     // Introduction
     if (interaction.commandName === 'introduction') {
       if (!data) await interaction.reply({ content: 'Server is not setup yet' })
-      else return introduction(interaction)
+      else return introduction(interaction, data)
     }
   } else if (interaction.isModalSubmit()) return submission(interaction, data) // Introduction Submit Handler
 })
