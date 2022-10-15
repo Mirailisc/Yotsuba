@@ -13,7 +13,7 @@ ENV CLIENT_ID=${CLIENT_ID}
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 COPY . ./
-RUN pnpx prisma db pull
+RUN pnpm run prisma:generate
 
 FROM build as deploy
 CMD [ "pnpm", "start" ]
