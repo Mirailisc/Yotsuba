@@ -34,6 +34,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            - DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
-            - DATABASE_URL=${{ secrets.DATABASE_URL }}
-            - CLIENT_ID=${{ secrets.CLIENT_ID }}
+            DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            CLIENT_ID=${{ secrets.CLIENT_ID }}
