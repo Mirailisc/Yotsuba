@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model guild_user {
+  id             String      @id @default(uuid()) @map("_id")
+  userId         String
+  formName       String
+  formAge        Int
+  formFoundGuild String?
+  createdAt      DateTime    @default(now())
+  guild_id       String      @unique
+  guild          guild_info? @relation(fields: [guild_id], references: [id])
+}
+
+model guild_info {
+  id               String       @id @default(uuid()) @map("_id")
+  guildId          String       @unique
+  welcomeChannel   String
+  introduceChannel String
+  joinRole         String
+  memberRole       String
+  createdAt        DateTime     @default(now())
+  users            guild_user[]
+}
