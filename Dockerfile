@@ -16,4 +16,4 @@ COPY . ./
 RUN pnpx prisma db pull
 
 FROM build as deploy
-RUN pnpm start
+CMD [ "pnpm", "start" ]
