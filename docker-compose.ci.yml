@@ -9,5 +9,6 @@ services:
       - CLIENT_ID
       - DATABASE_URL
       - DISCORD_TOKEN
+    command: /bin/sh -c "pnpm i"
     volumes:
       - ./:/app
