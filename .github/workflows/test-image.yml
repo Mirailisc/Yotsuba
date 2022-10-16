@@ -11,22 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_FILE: docker-compose.yml
-      USERNAME: ${{ secrets.DOCKER_USER }}
-      PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Login to DockerHub
-        run: docker login -u $USERNAME -p $PASSWORD
-
       - name: Build docker images
-        run: docker build . --file Dockerfile --tag yotsuba:$(date +%s) \
-             --build-arg DISCORD_TOKEN="${{ secrets.DISCORD_TOKEN }}" \
-             --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" \
-             --build-arg CLIENT_ID="${{ secrets.CLIENT_ID }}" \
-  
+        run: docker compose -f docker-compose.yml -f docker-compose.ci.yml up
+      
+      - name: Check Container
+        run: docker ps
+
   eslint:
     name: Run eslint scanning
     needs: [build]
