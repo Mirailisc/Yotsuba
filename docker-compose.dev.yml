@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  yotsuba:
+    build:
+      context: .
+      target: setup
+    environment:
+      - CLIENT_ID
+      - DATABASE_URL
+      - DISCORD_TOKEN
+    command: /bin/sh -c "pnpm i && pnpm start"
+    volumes:
+      - ./:/app
