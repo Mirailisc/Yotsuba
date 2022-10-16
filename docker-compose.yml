@@ -3,3 +3,4 @@ version: '3.5'
 services:
   yotsuba:
     image: mirailisc/yotsuba:main
+    restart: unless-stopped
