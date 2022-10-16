@@ -23,9 +23,9 @@ jobs:
 
       - name: Build docker images
         run: docker build . --file Dockerfile --tag yotsuba:$(date +%s) \
-             --build-arg DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} \
-             --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
-             --build-arg CLIENT_ID=${{ secrets.CLIENT_ID }} \
+             --build-arg DISCORD_TOKEN="${{ secrets.DISCORD_TOKEN }}" \
+             --build-arg DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+             --build-arg CLIENT_ID="${{ secrets.CLIENT_ID }}" \
   
   eslint:
     name: Run eslint scanning
