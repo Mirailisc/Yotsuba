@@ -17,7 +17,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Create Docker context
-      - run: docker buildx create --name yotsuba-builder --driver docker-container --use tls-environment
+        run: docker buildx create --name yotsuba-builder --driver docker-container --use tls-environment
 
       - name: Set up Docker Buildx
         id: buildx
