@@ -23,7 +23,6 @@ const interactionCreate = async (interaction) => {
         else return introduction(interaction, data)
     }
   } else if (interaction.isModalSubmit()) {
-    // Custom ID handler
     switch (interaction.customId) {
       case 'introduce':
         return submission(interaction, data)

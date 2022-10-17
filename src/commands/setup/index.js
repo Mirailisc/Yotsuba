@@ -1,5 +1,7 @@
+import { EmbedBuilder } from 'discord.js'
 import { prisma } from '../../index.js'
 import reply from '../../interactions/interactionReply.js'
+const iconURL = 'https://cloud.mirailisc.me/s/3FTSq43bDcXXQeL/preview'
 
 const setup = async (interaction) => {
   const welcomeChannel = interaction.options.get('welcome-channel')
@@ -9,34 +11,23 @@ const setup = async (interaction) => {
 
   const guildId = await interaction.guildId
 
-  const isExist = await prisma.guild_info.findUnique({
-    where: {
-      guildId,
-    },
-  })
+  console.log(`Starting setup server for ${interaction.member.guild.name}`)
 
-  if (interaction.member.guild.ownerId !== interaction.user.id)
-    return await reply(interaction, 'You dont have a permission to use this command', 3000)
-  else if (isExist) {
-    // return await reply(interaction, 'This server is already setup', 3000)
-    await prisma.guild_info.update({
-      where: {
-        guildId,
-      },
-      data: {
-        welcomeChannel: welcomeChannel.value,
-        introduceChannel: introduceChannel.value,
-        joinRole: joinRole.value,
-        memberRole: memberRole.value,
-      },
-    })
-    return await reply(interaction, 'Setup updated, Yotsuba is now ready to use!', 10000)
+  if (interaction.user.id !== interaction.member.guild.ownerId) {
+    return reply(interaction, 'You are not allowed to use this command', 10000)
   } else {
-    console.log(`initialized setup server for '${interaction.member.guild.name}'`)
-
-    try {
-      await prisma.guild_info.create({
-        data: {
+    await prisma.guild_info
+      .upsert({
+        where: {
+          guildId,
+        },
+        update: {
+          welcomeChannel: welcomeChannel.value,
+          introduceChannel: introduceChannel.value,
+          joinRole: joinRole.value,
+          memberRole: memberRole.value,
+        },
+        create: {
           welcomeChannel: welcomeChannel.value,
           introduceChannel: introduceChannel.value,
           joinRole: joinRole.value,
@@ -44,12 +35,41 @@ const setup = async (interaction) => {
           guildId,
         },
       })
+      .catch(async (err) => {
+        const embed = new EmbedBuilder()
+          .setColor('#f55442')
+          .setTitle('Failed!')
+          .setThumbnail(interaction.member.guild.iconURL({ dynamic: true }))
+          .setDescription('There is a problem with the server. Please try again later.')
+          .setTimestamp()
+          .setFooter({ text: '© 2022 Phubordin Poolnai', iconURL })
+        await interaction
+          .reply({ embeds: [embed] })
+          .then(() =>
+            setTimeout(() => {
+              interaction.deleteReply()
+            }, 10000)
+          )
+          .catch((err) => console.log(err))
+        return console.log(err)
+      })
+    const embed = new EmbedBuilder()
+      .setColor('#90f542')
+      .setTitle('Success!')
+      .setThumbnail(interaction.member.guild.iconURL({ dynamic: true }))
+      .setDescription('Yotsuba is ready to use!')
+      .setTimestamp()
+      .setFooter({ text: '© 2022 Phubordin Poolnai', iconURL })
 
-      return await reply(interaction, 'Setup completed, Yotsuba is now ready to use!', 10000)
-    } catch (err) {
-      console.log(err)
-      return await reply(interaction, 'Setup Failed, Theres something wrong with the server!', 10000)
-    }
+    console.log(`${interaction.member.guild.name} Setup completed!`)
+    return await interaction
+      .reply({ embeds: [embed] })
+      .then(() =>
+        setTimeout(() => {
+          interaction.deleteReply()
+        }, 10000)
+      )
+      .catch((err) => console.log(err))
   }
 }
 

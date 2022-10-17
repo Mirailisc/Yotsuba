@@ -50,12 +50,15 @@ const submission = async (interaction, context) => {
   const age = interaction.fields.getTextInputValue('age')
   const guildFound = interaction.fields.getTextInputValue('guildFound')
 
-  const isExist = await prisma.guild_user.findMany({
-    where: {
-      userId: interaction.user.id,
-      guild_id: context.id,
-    },
-  })
+  const isExist = await prisma.guild_user
+    .findMany({
+      where: {
+        userId: interaction.user.id,
+        guild_id: context.id,
+      },
+    })
+    .catch((err) => console.log(err))
+
   if (isExist.length !== 0) {
     return interaction
       .reply({
@@ -68,37 +71,37 @@ const submission = async (interaction, context) => {
       )
       .catch((err) => console.log(err))
   } else {
-    try {
-      await prisma.guild_user.create({
+    const guildId = await interaction.guildId
+    const userId = await interaction.user.id
+    await prisma.guild_user
+      .create({
         data: {
-          userId: interaction.user.id,
+          userId,
           formName: name,
           formAge: parseInt(age),
           formFoundGuild: guildFound,
-          guild_id: context.id,
+          guild_id: guildId,
         },
       })
+      .catch((err) => console.log(err))
 
-      console.log(`Added ${interaction.user.username + '#' + interaction.user.discriminator} to Database`)
+    console.log(`Added ${interaction.user.username + '#' + interaction.user.discriminator} to Database`)
 
-      const addRole = await interaction.guild.roles.cache.find((role) => role.id === context.memberRole)
-      const rmRole = await interaction.guild.roles.cache.find((role) => role.id === context.joinRole)
-      await interaction.member.roles.add(addRole)
-      await interaction.member.roles.remove(rmRole)
+    const addRole = await interaction.guild.roles.cache.find((role) => role.id === context.memberRole)
+    const rmRole = await interaction.guild.roles.cache.find((role) => role.id === context.joinRole)
+    await interaction.member.roles.add(addRole)
+    await interaction.member.roles.remove(rmRole)
 
-      return interaction
-        .reply({
-          embeds: [successIntroduced],
-        })
-        .then(() =>
-          setTimeout(() => {
-            interaction.deleteReply()
-          }, 10000)
-        )
-        .catch((err) => console.log(err))
-    } catch (err) {
-      return console.log(err)
-    }
+    return interaction
+      .reply({
+        embeds: [successIntroduced],
+      })
+      .then(() =>
+        setTimeout(() => {
+          interaction.deleteReply()
+        }, 10000)
+      )
+      .catch((err) => console.log(err))
   }
 }
 
