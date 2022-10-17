@@ -1,7 +1,7 @@
 export const commands = [
   {
     name: 'setup',
-    description: 'setup bot for the server',
+    description: 'setup bot for the server (for server owner only)',
     options: [
       {
         name: 'welcome-channel',
