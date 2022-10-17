@@ -14,7 +14,7 @@ model guild_user {
   formAge        Int
   formFoundGuild String?
   createdAt      DateTime    @default(now())
-  guild_id       String      @unique
+  guild_id       String
   guild          guild_info? @relation(fields: [guild_id], references: [id])
 }
 
