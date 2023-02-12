@@ -25,7 +25,7 @@ pnpm run dev
 ```
 
 ## Production
-**In main branch, production was handled by pipelines**
+**In `main` branch, production was handled by pipelines**
 ```bash
 pnpm start
 ```
