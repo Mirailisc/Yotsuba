@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Relase
 
 on: [workflow_dispatch]
 
