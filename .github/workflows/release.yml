@@ -1,0 +1,30 @@
+name: Publish Docker image
+
+on: [workflow_dispatch]
+
+jobs:
+  release:
+    name: Release Version
+    if: ${{ github.ref == 'refs/heads/main'}}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2.5.0
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7.11.0
+
+      - uses: actions/setup-node@v3.5.1
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Release
+        run: pnpm run semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
