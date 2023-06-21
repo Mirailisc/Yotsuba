@@ -2,5 +2,13 @@ version: '3.5'
 
 services:
   yotsuba:
-    image: mirailisc/yotsuba:latest
-    restart: unless-stopped
+    build:
+      context: .
+      target: setup
+    environment:
+      - CLIENT_ID
+      - DATABASE_URL
+      - DISCORD_TOKEN
+    command: /bin/sh -c "pnpm i && pnpm start"
+    volumes:
+      - ./:/app
