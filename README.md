@@ -1,22 +1,28 @@
+![ArgoCD](https://argocd.mirailisc.me/api/badge?name=yotsuba)
+
 # Yotsuba
+
 a utility bot for my discord server
 
-## Setup
-### Dependencies
-```bash
-pnpm install
-```
+## Prerequisite
+- Node v16
+- MongoDB
+- Discord Application & Bot
 
-### Prisma
+## Setup
+run this command
 ```bash
-pnpm run prisma:generate
+pnpm install && pnpm run prisma:generate
 ```
 
 ### Environment
+
+Create `.env` and copy this
+
 ```env
-DISCORD_TOKEN=
-CLIENT_ID=
-DATABASE_URL=
+DISCORD_TOKEN=<your_discord_bot_token>
+CLIENT_ID=<your_discord_application_id>
+DATABASE_URL=<your_database_url>
 ```
 
 ## Development
@@ -29,3 +35,6 @@ pnpm run dev
 ```bash
 pnpm start
 ```
+
+You can find discord token and application id at
+https://discord.com/developers/applications/
